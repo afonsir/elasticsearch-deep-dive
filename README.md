@@ -1,3 +1,15 @@
+<!--
++----------+-----------+------------+--------------+----------+
+| Server   | Node Name | Attributes | Roles        | JVM Heap |
++----------+-----------+------------+--------------+----------+
+| master-1 | master-1  |            | master       | 768m     |
++----------+-----------+------------+--------------+----------+
+| data-1   | data-1    | temp=hot   | data, ingest | 2g       |
++----------+-----------+------------+--------------+----------+
+| data-2   | data-2    | temp=warm  | data, ingest | 2g       |
++----------+-----------+------------+--------------+----------+
+-->
+
 ## Installing Elasticsearch in RPM systems
 
 - Import the gpg key:
@@ -58,7 +70,7 @@ node.ml: false
 -Xmx768m
 ```
 
-- Start the elasticsearch service:
+- Start the Elasticsearch service:
 
 ```bash
 sudo systemctl start elasticsearch
@@ -96,7 +108,7 @@ node.ml: false
 -Xmx1g # default
 ```
 
-- Start the elasticsearch service:
+- Start the Elasticsearch service:
 
 ```bash
 sudo systemctl start elasticsearch
@@ -134,7 +146,7 @@ node.ml: false
 -Xmx1g # default
 ```
 
-- Start the elasticsearch service:
+- Start the Elasticsearch service:
 
 ```bash
 sudo systemctl start elasticsearch
