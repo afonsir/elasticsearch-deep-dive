@@ -42,7 +42,7 @@ discovery.seed_hosts: [ "<PRIVATE_MASTER_IP_ADDR>" ]
 cluster.initial_master_nodes: [ "master-1" ]
 node.master: true
 node.data: false
-node.ingest: true
+node.ingest: false
 node.ml: false
 ```
 
@@ -80,7 +80,7 @@ discovery.seed_hosts: [ "<PRIVATE_MASTER_IP_ADDR>" ]
 cluster.initial_master_nodes: [ "master-1" ]
 node.master: false
 node.data: true
-node.ingest: false
+node.ingest: true
 node.ml: false
 ```
 
@@ -118,7 +118,7 @@ discovery.seed_hosts: [ "<PRIVATE_MASTER_IP_ADDR>" ]
 cluster.initial_master_nodes: [ "master-1" ]
 node.master: false
 node.data: true
-node.ingest: false
+node.ingest: true
 node.ml: false
 ```
 

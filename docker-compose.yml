@@ -12,7 +12,7 @@ x-es-master-common:
       discovery.seed_hosts: es-master-1
       node.master: "true"
       node.data: "false"
-      node.ingest: "true"
+      node.ingest: "false"
       node.ml: "false"
   ulimits:
     memlock:
@@ -36,7 +36,7 @@ x-es-data-common:
       discovery.seed_hosts: es-master-1
       node.master: "false"
       node.data: "true"
-      node.ingest: "false"
+      node.ingest: "true"
       node.ml: "false"
   ulimits:
     memlock:
