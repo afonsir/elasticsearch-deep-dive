@@ -83,6 +83,16 @@ services:
     volumes:
       - es-data-2:/usr/share/elasticsearch/data
 
+  kibana:
+    image: kibana:7.6.0
+    hostname: kibana
+    environment:
+      SERVER_PORT: 8080
+      SERVER_HOST: kibana
+      ELASTICSEARCH_HOSTS: http://es-master-1:9200
+    ports:
+      - 8080:8080
+
 volumes:
   es-master-1:
   es-data-1:

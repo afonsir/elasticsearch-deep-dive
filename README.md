@@ -154,3 +154,39 @@ less /var/log/elasticsearch/playground.log
 curl http://localhost:9200/_cat/nodes?v
 curl http://localhost:9200/_cat/health?v
 ```
+
+## Installing Kibana in RPM systems
+
+- On master node, download the Kibana package:
+
+```bash
+curl --remote-name https://artifacts.elastic.co/downloads/kibana/kibana-7.6.0-x86_64.rpm
+```
+
+- Install the Kibana package:
+
+```bash
+sudo rpm --install kibana-7.6.0-x86_64.rpm
+```
+
+- Enable Kibana service:
+
+```bash
+sudo systemctl enable kibana
+```
+
+- Kibana config:
+
+```yml
+# /etc/kibana/kibana.yml
+
+server.port: 8080
+server.host: "<PRIVATE_MASTER_IP_ADDR>"
+elasticsearch.hosts: [ "http://localhost:9200" ]
+```
+
+- Start the Kibana service:
+
+```bash
+sudo systemctl start kibana
+```
