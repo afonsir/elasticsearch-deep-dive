@@ -1,0 +1,89 @@
+version: '3'
+
+x-es-master-common:
+  &es-master-common
+  image: elasticsearch:7.6.0
+  environment:
+    &es-master-common-env
+      ES_JAVA_OPTS: "-Xms768m -Xmx768m"
+      bootstrap.memory_lock: "true"
+      cluster.initial_master_nodes: es-master-1
+      cluster.name: es-docker-cluster
+      discovery.seed_hosts: es-master-1
+      node.master: "true"
+      node.data: "false"
+      node.ingest: "true"
+      node.ml: "false"
+  ulimits:
+    memlock:
+      soft: -1
+      hard: -1
+  healthcheck:
+    test: ["CMD", "curl", "--silent", "--fail", "http://localhost:9200/_cluster/health"]
+    interval: 30s
+    timeout: 10s
+    retries: 5
+
+x-es-data-common:
+  &es-data-common
+  image: elasticsearch:7.6.0
+  environment:
+    &es-data-common-env
+      ES_JAVA_OPTS: "-Xms1g -Xmx1g"
+      bootstrap.memory_lock: "true"
+      cluster.initial_master_nodes: es-master-1
+      cluster.name: es-docker-cluster
+      discovery.seed_hosts: es-master-1
+      node.master: "false"
+      node.data: "true"
+      node.ingest: "false"
+      node.ml: "false"
+  ulimits:
+    memlock:
+      soft: -1
+      hard: -1
+  healthcheck:
+    test: ["CMD", "curl", "--silent", "--fail", "http://localhost:9200/_cluster/health"]
+    interval: 30s
+    timeout: 10s
+    retries: 5
+  depends_on:
+    es-master-1:
+      condition: service_healthy
+
+services:
+  es-master-1:
+    <<: *es-master-common
+    hostname: master-1
+    environment:
+      <<: *es-master-common-env
+      node.name: es-master-1
+    ports:
+      - 9200:9200
+    volumes:
+      - es-master-1:/usr/share/elasticsearch/data
+
+  es-data-1:
+    <<: *es-data-common
+    hostname: data-1
+    environment:
+      <<: *es-data-common-env
+      node.name: es-data-1
+      node.attr.temp: hot
+    volumes:
+      - es-data-1:/usr/share/elasticsearch/data
+
+  es-data-2:
+    <<: *es-data-common
+    hostname: data-2
+    environment:
+      <<: *es-data-common-env
+      node.name: es-data-2
+      node.attr.temp: warm
+    volumes:
+      - es-data-2:/usr/share/elasticsearch/data
+
+volumes:
+  es-master-1:
+  es-data-1:
+  es-data-2:
