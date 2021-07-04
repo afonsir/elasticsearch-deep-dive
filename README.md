@@ -202,3 +202,200 @@ elasticsearch.hosts: [ "http://localhost:9200" ]
 ```bash
 sudo systemctl start kibana
 ```
+
+## Creating a Public Key Infrastructure (PKI)
+
+- Create a Certificate Authority file:
+
+```bash
+/usr/share/elasticsearch/bin/elasticsearch-certutil ca \
+  --out /etc/elasticsearch/ca \
+  --pass elastic_ca
+```
+
+- Create a certificate for master node:
+
+```bash
+/usr/share/elasticsearch/bin/elasticsearch-certutil cert \
+  --ca /etc/elasticsearch/ca \
+  --ca-pass elastic_ca \
+  --name master_1 \
+  --dns <MASTER_DNS_ADDRESS> \
+  --ip <MASTER_PRIVATE_IP_ADDRESS> \
+  --out /etc/elasticsearch/master-1 \
+  --pass elastic_master_1
+```
+
+- Create certificates for data nodes:
+
+```bash
+# Data 1
+
+/usr/share/elasticsearch/bin/elasticsearch-certutil cert \
+  --ca /etc/elasticsearch/ca \
+  --ca-pass elastic_ca \
+  --name data_1 \
+  --dns <DATA_1_DNS_ADDRESS> \
+  --ip <DATA_1_PRIVATE_IP_ADDRESS> \
+  --out /etc/elasticsearch/data-1 \
+  --pass elastic_data_1
+
+# Data 2
+
+/usr/share/elasticsearch/bin/elasticsearch-certutil cert \
+  --ca /etc/elasticsearch/ca \
+  --ca-pass elastic_ca \
+  --name data_2 \
+  --dns <DATA_2_DNS_ADDRESS> \
+  --ip <DATA_2_PRIVATE_IP_ADDRESS> \
+  --out /etc/elasticsearch/data-2 \
+  --pass elastic_data_2
+```
+
+- Move certificates to respective nodes:
+
+```bash
+# Data 1
+
+chown <YOUR_USER>:<YOUR_USER> data-1
+
+scp data-1 <DATA_1_PRIVATE_IP_ADDRESS>:/tmp
+
+chown root:elasticsearch data-1 # at data 1 node and move to /etc/elasticsearch
+
+# Data 2
+
+chown <YOUR_USER>:<YOUR_USER> data-2
+
+scp data-2 <DATA_2_PRIVATE_IP_ADDRESS>:/tmp
+
+chown root:elasticsearch data-2 # at data 2 node and move to /etc/elasticsearch
+```
+
+## Encrypt the Transport Network
+
+- Change certificate permissions file:
+
+```bash
+chmod 640 [master-1, data-1, data-2]
+```
+
+### Node Configurations:
+
+- Elasticsearch config:
+
+```yml
+# /etc/elasticsearch/elasticsearch.yml
+
+xpack.security.enabled: true
+xpack.security.transport.ssl.enabled: true
+xpack.security.transport.ssl.verification_mode: full
+xpack.security.transport.ssl.keystore.path: [master-1, data-1, data-2]
+xpack.security.transport.ssl.truststore.path: [master-1, data-1, data-2]
+```
+
+- Add pass-phrase to Elasticsearch keystore:
+
+```bash
+# keystore
+
+/usr/share/elasticsearch/bin/elasticsearch-keystore add \
+  xpack.security.transport.ssl.keystore.secure_password
+
+> type the pass-phrase
+
+
+# truststore
+
+/usr/share/elasticsearch/bin/elasticsearch-keystore add \
+  xpack.security.transport.ssl.truststore.secure_password
+
+> type the pass-phrase
+```
+
+- Restart Elasticsearch:
+
+```bash
+sudo systemctl restart elasticsearch
+```
+
+## Define Elasticsearch user passwords
+
+- Redefine default passwords:
+
+```bash
+# elastic, apm_system, kibana, logstash_system, beats_system, remote_monitoring_user
+
+/usr/share/elasticsearch/bin/elasticsearch-setup-password interactive
+```
+
+- Kibana config:
+
+```yml
+# /etc/kibana/kibana.yml
+
+elasticsearch.username: "kibana"
+elasticsearch.password: "<KIBANA_USER_PASSWORD>"
+```
+
+- Restart Kibana:
+
+```bash
+sudo systemctl restart kibana
+```
+
+## Encrypt the Client Network
+
+**IMPORTANT**: In a production environment, is highly recommend to use a global signed certificate, instead of a self-signed certificate.
+
+### Node Configurations:
+
+- Elasticsearch config:
+
+```yml
+# /etc/elasticsearch/elasticsearch.yml
+
+xpack.security.http.ssl.enabled: true
+xpack.security.http.ssl.keystore.path: [master-1, data-1, data-2]
+xpack.security.http.ssl.truststore.path: [master-1, data-1, data-2]
+```
+
+- Add pass-phrase to Elasticsearch keystore:
+
+```bash
+# keystore
+
+/usr/share/elasticsearch/bin/elasticsearch-keystore add \
+  xpack.security.http.ssl.keystore.secure_password
+
+> type the pass-phrase
+
+
+# truststore
+
+/usr/share/elasticsearch/bin/elasticsearch-keystore add \
+  xpack.security.http.ssl.truststore.secure_password
+
+> type the pass-phrase
+```
+
+- Restart Elasticsearch:
+
+```bash
+sudo systemctl restart elasticsearch
+```
+
+- Kibana config:
+
+```yml
+# /etc/kibana/kibana.yml
+
+elasticsearch.hosts: [ "https://localhost:9200" ]
+elasticsearch.ssl.verificationMode: none
+```
+
+- Restart Kibana:
+
+```bash
+sudo systemctl restart kibana
+```
