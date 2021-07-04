@@ -399,3 +399,37 @@ elasticsearch.ssl.verificationMode: none
 ```bash
 sudo systemctl restart kibana
 ```
+
+## Create Roles
+
+- Create a role with read-only permissions to all indexes:
+
+```json
+POST _secutiry/role/read_only
+{
+  "indices": [
+    {
+      "names": [ "*" ],
+      "privileges": [ "read" ]
+    }
+  ]
+}
+
+GET _security/role/read_only
+```
+
+## Create Users
+
+- Create a user:
+
+```json
+POST _security/user/new_user
+{
+  "roles": [ "read_only", "kibana_user" ],
+  "full_name": "User Full Name",
+  "email": "user@company.com",
+  "password": "mypwd123"
+}
+
+GET _security/user/new_user
+```
