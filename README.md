@@ -433,3 +433,46 @@ POST _security/user/new_user
 
 GET _security/user/new_user
 ```
+
+## Create Indices
+
+- List indices:
+
+```bash
+GET _cat/indices?v
+```
+
+- Index's basic structure:
+
+```json
+PUT my_first_index_1
+{
+  "aliases": {
+    "my_first_index": {}
+  },
+  "mappings": {
+    "properties": {
+      "field_1": {
+        "type": "keyword"
+      },
+      "field_2": {
+        "properties": {
+          "sub_field_1": {
+            "type": "integer"
+          }
+        }
+      }
+    }
+  },
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 1
+  }
+}
+
+GET my_first_index_1
+
+GET my_first_index // using index alias
+
+DELETE my_first_index_1
+```
