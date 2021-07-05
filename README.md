@@ -476,23 +476,3 @@ GET my_first_index // using index alias
 
 DELETE my_first_index_1
 ```
-
-## Data Samples
-
-- Account data:
-
-```bash
-curl --remote-name https://raw.githubusercontent.com/linuxacademy/content-elasticsearch-deep-dive/master/sample_data/accounts.json
-```
-
-- Logs data:
-
-```bash
-curl --remote-name https://raw.githubusercontent.com/linuxacademy/content-elasticsearch-deep-dive/master/sample_data/logs.json
-```
-
-- Shakespeare data:
-
-```bash
-curl --remote-name https://raw.githubusercontent.com/linuxacademy/content-elasticsearch-deep-dive/master/sample_data/shakespeare.json
-```
