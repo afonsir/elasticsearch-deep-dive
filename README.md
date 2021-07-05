@@ -326,7 +326,7 @@ sudo systemctl restart elasticsearch
 ```bash
 # elastic, apm_system, kibana, logstash_system, beats_system, remote_monitoring_user
 
-/usr/share/elasticsearch/bin/elasticsearch-setup-password interactive
+/usr/share/elasticsearch/bin/elasticsearch-setup-passwords interactive
 ```
 
 - Kibana config:
