@@ -290,8 +290,8 @@ chmod 640 [master-1, data-1, data-2]
 xpack.security.enabled: true
 xpack.security.transport.ssl.enabled: true
 xpack.security.transport.ssl.verification_mode: full
-xpack.security.transport.ssl.keystore.path: [master-1, data-1, data-2]
-xpack.security.transport.ssl.truststore.path: [master-1, data-1, data-2]
+xpack.security.transport.ssl.keystore.path: [master-1, data-1, data-2] # certificate name
+xpack.security.transport.ssl.truststore.path: [master-1, data-1, data-2] # certificate name
 ```
 
 - Add pass-phrase to Elasticsearch keystore:
