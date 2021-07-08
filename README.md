@@ -520,3 +520,49 @@ POST /shakespeare/_refresh
 
 POST /logs/_refresh
 ```
+
+## CRUD with indices
+
+- To read a record in an indice:
+
+```json
+GET bank/_doc/1000
+```
+
+- To create a new record in an indice:
+
+```json
+PUT bank/_doc/1000
+{
+  "account_number" : 1000,
+  "balance" : 1000000,
+  "firstname" : "Afonso",
+  "lastname" : "Costa",
+  "age" : 24,
+  "gender" : "M",
+  "address" : "123 Main Street",
+  "employer" : "Elastic",
+  "email" : "afonso@elastic.com",
+  "city" : "São Paulo",
+  "state" : "SP"
+}
+```
+
+- To update an existence record in an indice:
+
+```json
+POST bank/_update/1000
+{
+  "doc": {
+    "city" : "Minas Gerais",
+    "state" : "MG",
+    "favorite_color": "red"
+  }
+}
+```
+
+- To delete a record from an indice:
+
+```json
+DELETE bank/_doc/1000
+```
