@@ -790,3 +790,46 @@ GET logs/_search
   }
 }
 ```
+
+- Bank example:
+
+1.  How many unique employers are there among our account holders?
+2.  How many accounts do we have in each of the 50 US states?
+3.  What is the average balance for each of the 50 US states, and what state has the maximum average balance?
+
+```json
+GET bank/_search
+{
+  "size": 0,
+  "aggs": {
+    "employers": {
+      "cardinality": {
+        "field": "employer.keyword"
+      }
+    },
+    "states": {
+      "terms": {
+        "field": "state.keyword",
+        "size": 50
+      },
+      "aggs": {
+        "balance_sum": {
+          "sum": {
+            "field": "balance"
+          }
+        },
+        "balance_avg": {
+          "avg": {
+            "field": "balance"
+          }
+        }
+      }
+    },
+    "max_avg_balance": {
+      "max_bucket": {
+        "buckets_path": "states>balance_avg"
+      }
+    }
+  }
+}
+```
