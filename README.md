@@ -566,3 +566,34 @@ POST bank/_update/1000
 ```json
 DELETE bank/_doc/1000
 ```
+
+## Non-Analyzed Search
+
+- To make a term level search:
+
+```json
+GET bank/_search?size=1
+{
+  "query": {
+    "term": {
+      "state.keyword": {
+        "value": "CO"
+      }
+    }
+  }
+}
+
+GET bank/_search
+{
+  "size": 50,
+  "query": {
+    "terms": {
+      "state.keyword": [
+        "CO",
+        "PA",
+        "NV"
+      ]
+    }
+  }
+}
+```
