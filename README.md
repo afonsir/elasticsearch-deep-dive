@@ -743,3 +743,50 @@ GET bank/_search
   }
 }
 ```
+
+## Pipeline Aggregations
+
+- To combine aggregations through pipelines:
+
+```json
+GET logs/_search
+{
+  "size": 0,
+  "aggs": {
+    "hour": {
+      "date_histogram": {
+        "field": "@timestamp",
+        "calendar_interval": "hour"
+      },
+      "aggs": {
+        "clients": {
+          "cardinality": {
+            "field": "clientip.keyword"
+          }
+        },
+        "sum_of_clients": {
+          "cumulative_sum": {
+            "buckets_path": "clients"
+          }
+        },
+        "clients_per_minute": {
+          "derivative": {
+            "buckets_path": "sum_of_clients",
+            "unit": "1m"
+          }
+        }
+      }
+    },
+    "min_clients": {
+      "min_bucket": {
+        "buckets_path": "hour>clients"
+      }
+    },
+    "max_clients": {
+      "max_bucket": {
+        "buckets_path": "hour>clients"
+      }
+    }
+  }
+}
+```
