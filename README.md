@@ -665,3 +665,35 @@ GET bank/_search
   }
 }
 ```
+
+### Bucket Aggregations
+
+- To bucketize aggregations:
+
+```json
+GET logs/_search
+{
+  "size": 0,
+  "aggs": {
+    "events_per_day": {
+      "date_histogram": {
+        "field": "@timestamp",
+        "calendar_interval": "day"
+      }
+    }
+  }
+}
+
+GET bank/_search
+{
+  "size": 0,
+  "aggs": {
+    "accounts_per_state": {
+      "terms": {
+        "field": "state.keyword",
+        "size": 50
+      }
+    }
+  }
+}
+```
