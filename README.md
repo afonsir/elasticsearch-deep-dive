@@ -597,3 +597,41 @@ GET bank/_search
   }
 }
 ```
+
+## Analyzed Search
+
+- To generate tokens from a given sentence:
+
+```json
+GET _analyze
+{
+  "analyzer": "english",
+  "text": "The QUICK brown Foxes jumped over the fence."
+}
+```
+
+- To make a full-text analyzed search:
+
+```json
+GET shakespeare/_search
+{
+  "query": {
+    "match": {
+      "text_entry": "King lord"
+    }
+  }
+}
+```
+
+- To make a full-text analyzed search with combined tokens:
+
+```json
+GET shakespeare/_search
+{
+  "query": {
+    "match_phrase": {
+      "text_entry": "My lord"
+    }
+  }
+}
+```
