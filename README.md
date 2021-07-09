@@ -635,3 +635,33 @@ GET shakespeare/_search
   }
 }
 ```
+
+## Aggregations
+
+### Metric Aggregations
+
+- To aggregate metrics:
+
+```json
+GET bank/_search
+{
+  "size": 0,
+  "aggs": {
+    "avg_age": {
+      "avg": {
+        "field": "age"
+      }
+    },
+    "max_age": {
+      "max": {
+        "field": "age"
+      }
+    },
+    "min_age": {
+      "min": {
+        "field": "age"
+      }
+    }
+  }
+}
+```
