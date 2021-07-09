@@ -697,3 +697,49 @@ GET bank/_search
   }
 }
 ```
+
+### Sub-Aggregations
+
+- To combine both metric and bucket aggregations:
+
+```json
+GET logs/_search
+{
+  "size": 0,
+  "aggs": {
+    "extension": {
+      "terms": {
+        "field": "extension.keyword",
+        "size": 10
+      },
+      "aggs": {
+        "bytes": {
+          "avg": {
+            "field": "bytes"
+          }
+        }
+      }
+    }
+  }
+}
+
+GET bank/_search
+{
+  "size": 0,
+  "aggs": {
+    "states": {
+      "terms": {
+        "field": "state.keyword",
+        "size": 50
+      },
+      "aggs": {
+        "cities": {
+          "cardinality": {
+            "field": "city.keyword"
+          }
+        }
+      }
+    }
+  }
+}
+```
