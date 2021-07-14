@@ -833,3 +833,38 @@ GET bank/_search
   }
 }
 ```
+
+## Diagnose Shard Issues
+
+- To check indices status:
+
+```json
+GET _cat/indices?v
+```
+
+- To show if there is some problem with a given index:
+
+```json
+GET _cat/shards/logs?v
+```
+
+- To show if there is some problem with shards:
+
+```json
+GET _cluster/allocation/explain
+{
+  "index": "logs",
+  "shard": 0,
+  "primary": true
+}
+```
+
+- To configure manually a given index:
+
+```json
+PUT logs/_settings
+{
+  "index.routing.allocation.include._name": "data-3",
+  "number_of_replicas": 3
+}
+```
