@@ -499,7 +499,7 @@ curl --remote-name https://raw.githubusercontent.com/linuxacademy/content-elasti
 
 ## Bulk API
 
-- Importing **[account, shakespeare, logs]** data:
+- Importing **[accounts, shakespeare, logs]** data:
 
 ```bash
 curl \
@@ -507,8 +507,8 @@ curl \
   --insecure \
   --header 'Content-Type: application/x-ndjson' \
   --request POST \
-  https://localhost:9200/[account, shakespeare, logs]/_bulk \
-  --data-binary @[account, shakespeare, logs].json
+  https://localhost:9200/[ accounts, shakespeare, logs ]/_bulk \
+  --data-binary @[ accounts, shakespeare, logs ].json
 ```
 
 - Refresh manually the indices:
